@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load media_tag %}
+{% load static %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                {% if object.preview %}
+                    <img src="{% mediapath object.preview %}"
+                         alt="{{ object }}" class="rounded float-start me-4" style="max-width: 600px"/>
+                {% else %}
+                    <img src="{% static 'img/article_default_img.jpg' %}"
+                         alt="{{ object }}" class="rounded float-start me-4" style="max-width: 600px"/>
+                {% endif %}
+                <small class="d-block mb-3 text-muted">
+                    {{ object.created_on }} | Просмотров: {{ object.views }}
+                </small>
+                <p class="mx-3">
+                    {{ object.content }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row mb-3">
+        <table class="table table-columns">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Имя пользователя</th>
+                <th scope="col">Email</th>
+                <th scope="col">Админ</th>
+                <th scope="col">Статус активности</th>
+                <th scope="col">Управление</th>
+            </tr>
+            </thead>
+            {% for object in object_list %}
+            <tr>
+                <td>
+                    {{ object.id }}
+                </td>
+                <td>
+                    {{ object.first_name }} {{ object.last_name }}
+                </td>
+                <td>
+                    {{ object }}
+                </td>
+                <td>
+                    {{ object.is_superuser|yesno:"Да, Нет" }}
+                </td>
+                <td>
+                    {{ object.is_active|yesno:"Активен,Заблокирован" }}
+                </td>
+                <td>
+                    <a href="{% url 'users:user_edit' object.pk %}">Редактировать</a>
+{#                    {% if user.is_superuser %}#}
+{#                    <br /><a href="{% url 'users:user_delete' object.pk %}">Удалить</a>#}
+{#                    {% endif %}#}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    <div class="row text-center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page=1">&laquo; Первая</a>
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+
+        <small class="d-block mb-3 text-muted mt-2">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </small>
+    </span>
+    </div>
+{% endblock %}

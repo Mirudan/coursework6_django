@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load media_tag %}
+{% load static %}
+
+{% block content %}
+    {% for object in object_list %}
+        <div class="col-6">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header text-center">
+                    <h4 class="my-0 font-weight-normal">
+                        {{ object }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if object.preview %}
+                        <img src="{% mediapath object.preview %}" alt="{{ object }}" class="rounded img-fluid mb-3"/>
+                    {% else %}
+                        <img src="{% static 'img/article_default_img.jpg' %}" alt="{{ object }}"
+                             class="rounded img-fluid"/>
+                    {% endif %}
+                    <p>
+                        {{ object.content|truncatechars:100 }}
+                        <a href="{% url 'blog:view_article' object.slug %}">Читать дальше</a>
+                    </p>
+                </div>
+                <div class="card-footer p-1 small text-muted text-end">
+                    {{ object.created_on }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="text-center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page=1">&laquo; Первая</a>
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a class="btn btn-primary d-inline-flex align-items-center"
+               href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+
+        <small class="d-block mb-3 text-muted mt-2">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </small>
+    </span>
+    </div>
+{% endblock %}

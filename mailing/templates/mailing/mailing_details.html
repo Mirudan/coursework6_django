@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="col-lg-12 col-md-6 col-sm-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header"><h3>{{ object }}</h3></div>
+            <div class="card-body">
+                <p>Статус: {{ object.is_published|yesno:"Опубликована,Не опубликована" }}</p>
+                <p><strong>Полный текст рассылки:</strong> {{ object.body }}</p>
+                {% if settings %}
+                    <table class="table table-striped-columns">
+                        {% for i in settings %}
+                            <tr>
+                                <td class="col-2">Период рассылки:</td>
+                                <td>{{ i.mailing_start }} - {{ i.mailing_end }}</td>
+                            </tr>
+                            <tr>
+                                <td>Частота рассылки:</td>
+                                <td>{{ i.get_mailing_period_display }}</td>
+                            </tr>
+                            <tr>
+                                <td>Статус:</td>
+                                <td>{{ i.get_mailing_status_display }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+                <p>
+                    <small>Получатели:
+                        {% for obj in object.recipient.get_queryset %}
+                            {{ obj }}
+                        {% endfor %}
+                    </small>
+                </p>
+                <p>
+                    <small>Создатель: {{ object.owner }}</small>
+                </p>
+            </div>
+            <div class="card-footer pt-4">
+                {% if user.is_authenticated %}
+                    <p>
+                        {% if user.is_superuser or user == object.owner %}
+                            <a href="{% url 'mailing:update_mailing' object.pk %}"
+                               class="m-1 btn btn-sm btn-outline-warning">Редактировать рассылку</a>
+                        {% elif perms.mailing.can_cancel_mailing %}
+                            <a href="{% url 'mailing:update_mailing' object.pk %}"
+                               class="m-1 btn btn-sm btn-outline-warning">Изменить параметры публикации</a>
+                        {% endif %}
+                        {% if perms.mailing.delete_mailingmessage or user == object.owner %}
+                            <a href="{% url 'mailing:delete_mailing' object.pk %}"
+                               class="m-1 btn btn-sm btn-outline-danger">Удалить рассылку</a>
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

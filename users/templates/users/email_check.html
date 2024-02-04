@@ -1,0 +1,6 @@
+{% autoescape off %}
+Здравствуйте!
+Вы или кто-то другой указали этот email для регистрации на сайте http://{{ domain }}.
+Если это были вы, пожалуйста, пройдите по ссылке ниже для подтверждения регистрации:
+http://{{ domain }}{% url 'users:activate_user' token=token %}
+{% endautoescape %}

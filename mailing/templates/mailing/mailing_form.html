@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-12">
+        <form class="row" method="post" enctype="multipart/form-data">
+            <div class="col-6">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header"><h5>Настройки рассылки</h5></div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="input-group mb-3">
+                            <a href="{% url 'mailing:mailing_list' %}" class="p-2 btn btn-outline-primary">
+                                Назад
+                            </a>
+                            <button type="submit" class="p-2 btn btn-outline-success">
+                                {% if object %}
+                                    Сохранить изменения
+                                {% else %}
+                                    Создать рассылку
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if formset %}
+                <div class="col-6">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-header"><h5>Параметры запуска</h5></div>
+                        <div class="card-body">
+                            {{ formset.management_form }}
+                            {% for form in formset %}
+                                {{ form.as_p }}
+                                {% if not forloop.last %}
+                                    <hr class="m-4"/>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

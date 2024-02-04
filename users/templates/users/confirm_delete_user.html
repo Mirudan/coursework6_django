@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-12 text-center">
+    <div class="card mb-4 box-shadow">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p>Удалить пользователя {{object}}?</p>
+                <button type="submit" class="btn btn-block btn-outline-danger">Подтвердить</button>
+                <a href="{% url 'users:list_users' %}" class="p-2 btn btn-outline-primary">Отменить</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
